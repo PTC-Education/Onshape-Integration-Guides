@@ -76,8 +76,8 @@ Before making any API call to Onshape, you need to first set up and configure an
 
     from onshape_client.client import Client 
     client = Client(configuration={"base_url": base, 
-                                    "access_key": access, 
-                                    "secret_key": secret}) 
+                                   "access_key": access, 
+                                   "secret_key": secret}) 
 
 Effciently, Section 00.1 of the [Onshape API Snippets](https://github.com/PTC-Education/PTC-API-Playground/blob/main/Onshape_API_Snippets.ipynb) already provides two methods of configuring your API client: manually typing in your API keys, or uploading the `.py` file that you may have created and saved in Step 5 of [section 2](#2-generating-your-onshape-api-keys) above. 
 
@@ -139,6 +139,8 @@ Then, a possible configuration of this model can be specified through an API cal
     # Setting "size" to be "Large" and the "base_dimension" to be 0.5 meter 
     config = "size%3DLarge%3Bbase_dimension%3D0.5%2Bmeter"
     params["configuration"] = config
+
+**Note:** however, if you do not specify the `"configuration"` in your `query_params` for the API calls, Onshape will always use the default value of all the configurations, despite any changes in the actual Onshape document. Also, changing the configuration through API calls does not make saved changes to your Onshape document. Hence, you should plan the usage of your CAD model beforehand when deciding whether you should build the model with "configuration" or "variables" (which is essentially a part "feature"). 
 
 #### 3.3.2 Making `POST` API calls 
 When making a `POST` API call to update information of the Onshape model, most procedures and API call components are similar to a `GET` call, and the major difference comes from specifying the payload `body` of the request. 
