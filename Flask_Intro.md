@@ -1,5 +1,5 @@
 # Introduction to Integrating Flask Applications in Onshape 
-This guide provides a brief introduction on integrating a Flask application to the user interface of your Onshape document as an extension. 
+This guide provides a brief introduction on the necessary components of building a Python Flask applcation for Onshape integration. Then, it introduces the actual integration of the app to the user interface of an Onshape document. 
 
 ## Table of contents 
 * [1. General resources](#1-general-resources)
@@ -36,14 +36,14 @@ To access your Onshape documents, it would require your API access and the addre
     EID = ''
 
 For the `appkey` and `secretkey`, there are generally two ways to handle them securely in this case: 
-- You may ask the users to enter their API keys every time they use your app. This can be achieved through creating a form in the HTML file of your `/login` page for example. 
+- You may ask the users to enter their API keys every time they use your app. This can be achieved through creating a form in the HTML file of your `/login` page for example. None of these information should be stored after the webpage is closed. 
 - If you are the only user of the app, or if this app is designed for the use of only one user, you can (or instruct others to) do the following: 
     - Save the API keys as a `.py` file in the project folder of this app locally. 
     - Add a function in your Flask code to automatically retrieve these API keys from the file. 
     - Add this file to the `.gitignore` file if you are sharing your code with others. Such that your API keys and others' API keys don't get shared to the public, and all that is required from other users is to add their own API keys to the folder after cloning your project. 
     - More details for the first two points can be found in the `API_Intro.md` [guide](https://github.com/PTC-Education/Onshape-Integration-Guides/blob/main/API_Intro.md) and the [Onshape-API-Snippets](https://github.com/PTC-Education/PTC-API-Playground/blob/main/Onshape_API_Snippets.ipynb). 
 
-In this guide, we assume that the user will enter their API keys manually every time. 
+In this guide, we assume that the user will enter their API keys manually every time (i.e., the first method described above). 
 
 Assume that our main purpose of building this Flask app is to make REST API calls (more details on making API calls should be found in the `API_Intro.md` [guide](https://github.com/PTC-Education/Onshape-Integration-Guides/blob/main/API_Intro.md)), but through an integrated approach in the Onshape user interface. Then, we typically need to first build a `/login` page for the users to enter their API keys and the document's IDs, as required by most API calls, to log into the specified document with their credentials. 
 
@@ -61,7 +61,7 @@ Assume that our main purpose of building this Flask app is to make REST API call
 
         return render_template('login.html', DID=DID, WID=WID, EID=EID)
     
-From the code block above, we provide an efficient approach to obtain the `DID`, `WID`, and `EID` of the Onshape document that you are hosting this Flask app in. As we will later show when integrating the app with Onshape OAuth in [section 4.1](#41-onshape-integration-through-oauth), accessing this page through an URL in a specific format will allow the code to automatically obtain those information through the document's URL. Then, the `render_template` function will pass these three IDs to the form in `'login.html'`. Correspondinly, we need an HTML file named `login.html` with the following code (at a minimum): 
+From the code block above, we provide an efficient approach to obtain the `DID`, `WID`, and `EID` of the Onshape document that you are hosting this Flask app in. As we will later show when integrating the app with Onshape OAuth in [section 4.1](#41-onshape-integration-through-oauth), accessing this page through an URL in a specific format will allow the code to automatically obtain those information through the document's URL. Then, the `render_template()` function will pass these three IDs to the form in `'login.html'`. Correspondinly, we need an HTML file named `login.html` with the following code (at a minimum): 
 
     <!doctype html>
     <form action="/config">
@@ -102,6 +102,8 @@ As shown in the second line of the HTML code above, the answers collected in thi
 
 In the block of code above, we use the information collected from the `/login` page to run the function `configure_onshape_client()`, and then we print the return message of this function to the `return1` spot in the HTML file named `config.html`. Specifically, you can build your configuration function in the following structure: 
 
+    from onshape_client.client import Client 
+
     def configure_onshape_client(access, secret, did, wid, eid): 
         base = 'https://cad.onshape.com' # Change if using enterprise account 
         client = Client(configuration={'base_url': base, 
@@ -120,7 +122,7 @@ For `config.html`, the simplest design that you could build will be something li
 
 Such that, the return message from `configure_onshape_client()` will be put in the `return1` placeholder. Although not necessary, an additional button is also added above to allow the user to go back the `/login` page for potentially a new REST API call. 
 
-As a result, we have presented the most basic structure of a Flask app that can make REST API calls to Onshape documents specifically. The main purpose of these two webpages are to allow the users to enter their credential information in a form and then make API calls to the document that they specify. Some potential directions that you may build upon this simplest structure include: 
+As a result, we have presented the most basic structure of a Flask app that can make REST API calls to Onshape documents specifically. The main purpose of these two webpages are to allow the users to enter their credential information in a web form and then make API calls to the document that they specify. Some potential directions that you may build upon this simplest structure include: 
 - Add additional HTML designs and CSS styling to the webpages to improve the user interface and allow more functions 
 - Build additional webpage with Flask for additional functionality 
 
@@ -139,7 +141,7 @@ Then, you need to add this newly created certificates to be a trusted certificat
 2. Under the "Privary and Security" section, find and click "Manage cerficates" in "Security". 
 3. Follow the required process of your computer operating system to add `cert.pem` to be one of the trusted certificate of your computer. 
 
-In you are using a computer with MacOS, steps above will open your KeyChain Access, which can also be access in your Launchpad. Then: 
+If you are using a computer with MacOS, steps above will open your KeyChain Access, which can also be access in your Launchpad. Then: 
 
 1. Under "System" Keychains and "Certificates" Category, click the plus icon in the top left corner. 
 2. Browse for the `cert.pem` certificate that you created and open it. 
