@@ -4,6 +4,7 @@ This guide provides a brief introduction on the necessary components of building
 ## Table of contents 
 * [1. General resources](#1-general-resources)
 * [2. Connecting to Onshape documents with Flask](#2-connecting-to-onshape-documents-with-flask)
+    * [2.1. Security on API keys](#21-security-on-api-keys)
 * [3. Configure Flask as HTTPS](#3-configure-flask-as-https)
 * [4. Integrating to Onshape](#4-integrating-to-onshape)
     * [4.1. Integration through OAuth](#41-onshape-integration-through-oauth)
@@ -22,7 +23,7 @@ To further improve the webpage design of your Flask app, you may also find these
 While integrating your Flask app to Onshape, you will also very likely need to make REST API calls. For more details and introduction to the REST API in Onshape, please see check out the `API_Intro.md` [guide](https://github.com/PTC-Education/Onshape-Integration-Guides/blob/main/API_Intro.md). 
 
 Below are some more resources and links that will be referred to in this guide, please feel free to save them as resources for your future referrence. 
-- A sample project for Onshape that is built in Flask can be found [here](https://github.com/PTC-Education/Onshape-Flask). 
+- A sample project for Onshape that is built in Flask can be found [here](https://github.com/PTC-Education/Heat-Sink-Design). 
 - A guide to configure your Flask application as HTTPS can be found [here](https://blog.miguelgrinberg.com/post/running-your-flask-application-over-https). 
 
 
@@ -34,16 +35,6 @@ To access your Onshape documents, it would require your API access and the addre
     DID = ''
     WID = ''
     EID = ''
-
-For the `appkey` and `secretkey`, there are generally two ways to handle them securely in this case: 
-- You may ask the users to enter their API keys every time they use your app. This can be achieved through creating a form in the HTML file of your `/login` page for example. None of these information should be stored after the webpage is closed. 
-- If you are the only user of the app, or if this app is designed for the use of only one user, you can (or instruct others to) do the following: 
-    - Save the API keys as a `.py` file in the project folder of this app locally. 
-    - Add a function in your Flask code to automatically retrieve these API keys from the file. 
-    - Add this file to the `.gitignore` file if you are sharing your code with others. Such that your API keys and others' API keys don't get shared to the public, and all that is required from other users is to add their own API keys to the folder after cloning your project. 
-    - More details for the first two points can be found in the `API_Intro.md` [guide](https://github.com/PTC-Education/Onshape-Integration-Guides/blob/main/API_Intro.md) and the [Onshape-API-Snippets](https://github.com/PTC-Education/PTC-API-Playground/blob/main/Onshape_API_Snippets.ipynb). 
-
-In this guide, we assume that the user will enter their API keys manually every time (i.e., the first method described above). 
 
 Assume that our main purpose of building this Flask app is to make REST API calls (more details on making API calls should be found in the `API_Intro.md` [guide](https://github.com/PTC-Education/Onshape-Integration-Guides/blob/main/API_Intro.md)), but through an integrated approach in the Onshape user interface. Then, we typically need to first build a `/login` page for the users to enter their API keys and the document's IDs, as required by most API calls, to log into the specified document with their credentials. 
 
@@ -66,9 +57,9 @@ From the code block above, we provide an efficient approach to obtain the `DID`,
     <!doctype html>
     <form action="/config">
         <label for="appkey">API Key:</label>
-        <input type="text" id="appkey" name="appkey"><br><br>
+        <input type="text" id="appkey" name="appkey" value={{APPKEY}}><br><br>
         <label for="secretkey">Secret Key:</label>
-        <input type="text" id="secretkey" name="secretkey"><br><br>
+        <input type="text" id="secretkey" name="secretkey" value={{SECRETKEY}}><br><br>
 
         <label for="did">DocumentId:</label>
         <input type="text" id="did" name="did" value={{DID}}><br><br>
@@ -125,6 +116,52 @@ Such that, the return message from `configure_onshape_client()` will be put in t
 As a result, we have presented the most basic structure of a Flask app that can make REST API calls to Onshape documents specifically. The main purpose of these two webpages are to allow the users to enter their credential information in a web form and then make API calls to the document that they specify. Some potential directions that you may build upon this simplest structure include: 
 - Add additional HTML designs and CSS styling to the webpages to improve the user interface and allow more functions 
 - Build additional webpage with Flask for additional functionality 
+
+### 2.1. Security on API keys 
+For the API keys (i.e., `appkey` and `secretkey`), there are generally two ways to handle them securely in an integrated Flask app: 
+1. You may ask the users to enter their API keys every time they use your app, as shown in the example above. This was achieved through creating a form in the HTML file of your `/login` page for example. None of these information should be stored after the webpage is closed. 
+2. If you are the only user of the app, or if this app is designed for the use of only one user, you can (or instruct others to) do the following: 
+    - Save the API keys as a `.py` file in the project folder of this app locally. 
+    - Add a function in your Flask code to automatically retrieve these API keys from the file. 
+    - Add this file to the `.gitignore` file if you are sharing your code with others. Such that your API keys and others' API keys don't get shared to the public, and all that is required from other users is to add their own API keys to the folder after cloning your project. 
+    - More details for the first two points can be found in the `API_Intro.md` [guide](https://github.com/PTC-Education/Onshape-Integration-Guides/blob/main/API_Intro.md) and the [Onshape-API-Snippets](https://github.com/PTC-Education/PTC-API-Playground/blob/main/Onshape_API_Snippets.ipynb). 
+
+For example, we can ask the user to save their API keys in a file that is named `OnshapeAPIKeys.py` specifically. With the name of this file added to the `.gitignore` of the git project, this file will not be shared with others through any git commands. 
+
+In the Flask script, we can write the following code before we define the app's web pages to search for the user's API keys: 
+
+    import os 
+
+    appkey = ''
+    secretkey = ''
+
+    for _, _, files in os.walk('.'): 
+        if "OnshapeAPIKey.py" in files: 
+            exec(open("OnshapeAPIKey,py").read())
+            appkey = access 
+            secretkey = secret 
+            break 
+
+Such that, the program will automatically search and temporarily store the API keys of the user. Consequently, we should also make the following changes to the `login()` function: 
+
+    global appkey 
+    global secretkey 
+
+    if appkey: 
+        APPKEY = appkey 
+    else: 
+        APPKEY = None 
+    if secretkey: 
+        SECRETKEY = secretkey 
+    else: 
+        SECRETKEY = None 
+
+And we should also update the `return` command of the function: 
+
+    return render_template('login.html', APPKEY=APPKEY, SECRETKEY=SECRETKEY, DID=DID, WID=WID, EID=EID)
+
+With these code in place and the API keys correctly saved in the folder, the user should only need to click "submit" to log in to the document with their Onshape account once the app is integrated. A working example of this implementation can be found in [this repository](https://github.com/PTC-Education/Heat-Sink-Design). 
+
 
 ## 3. Configure Flask as HTTPS 
 A full guide with detailed explanation on configuring your Flask application as HTTPS can be found in [this tutorial](https://blog.miguelgrinberg.com/post/running-your-flask-application-over-https). In this section, we only present the commands that will be sufficient for you to configure a Flask web application for Onshape integration. 
