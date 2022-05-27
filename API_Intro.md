@@ -53,7 +53,9 @@ There is also an efficient way of separating the URL into its components:
 
     url = 'https://cad.onshape.com/documents/263517311c2ad139d4eb57ca/w/b45057ae06777e0c28bca6c5/e/d316bcbc694c9dbb6555f340'
     element = OnshapeElement(url) 
-
+    
+    base = elemenet.base_url
+    
     # Assume we would like to replace "did", "wid", and "eid" of the "fixed_url" with IDs from the main "url" above 
     fixed_url = '/api/partstudios/d/did/w/wid/e/eid/massproperties'
     fixed_url = fixed_url.replace('did', element.did)
@@ -99,9 +101,9 @@ Putting everything together, here is an example of a complete API call to get th
 
     url = 'https://cad.onshape.com/documents/263517311c2ad139d4eb57ca/w/b45057ae06777e0c28bca6c5/e/d316bcbc694c9dbb6555f340'
     
-    base = 'https://cad.onshape.com/' 
-    fixed_url = '/api/partstudios/d/did/w/wid/e/eid/massproperties'
     element = OnshapeElement(url) 
+    base = element.base_url
+    fixed_url = '/api/partstudios/d/did/w/wid/e/eid/massproperties'
     fixed_url = fixed_url.replace('did', element.did)
     fixed_url = fixed_url.replace('wid', element.wvmid)
     fixed_url = fixed_url.replace('eid', element.eid)
