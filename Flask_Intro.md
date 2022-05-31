@@ -137,7 +137,7 @@ In the Flask script, we can write the following code before we define the app's 
 
     for _, _, files in os.walk('.'): 
         if "OnshapeAPIKey.py" in files: 
-            exec(open("OnshapeAPIKey,py").read())
+            exec(open("OnshapeAPIKey.py").read())
             appkey = access 
             secretkey = secret 
             break 
