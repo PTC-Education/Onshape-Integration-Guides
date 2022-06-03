@@ -32,7 +32,9 @@ To gain access to your Onshape document through making API calls, we need to fir
         access = '{access_key}'
         secret = '{secret_key}'
 
-**CAUTION:** you should NEVER share your API keys with other people, nor upload this publicly through the Internet. Having access to your API keys is equivalent to gaining access to your Onshape account through password login with the permissions you specified in step 3 above. 
+**CAUTION:** 
+- You should NEVER share your API keys with other people, nor upload this publicly through the Internet. Having access to your API keys is equivalent to gaining access to your Onshape account through password login with the permissions you specified in step 3 above. 
+- You should also periodically delete your API keys and create a new set of keys on the [developer portal](https://dev-portal.onshape.com), so that even you accidentally uploaded your keys to any public platform, the leaked keys can be deactivated. 
 
 ## 3. Getting started with Onshape REST API 
 Note that this section only describes the most basic structure of a typical Onshape API call, more advanced applications can be found in the [Onshape API Snippets](https://github.com/PTC-Education/PTC-API-Playground/blob/main/Onshape_API_Snippets.ipynb) and other sample projects in the [PTC-API-Playground](https://github.com/PTC-Education/PTC-API-Playground). 
