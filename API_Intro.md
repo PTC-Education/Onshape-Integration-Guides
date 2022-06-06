@@ -10,7 +10,7 @@ This guide provides a brief introduction on setting up and using the Onshape RES
    * [3.3. Initiating an Onshape API call](#32-rest-api)
      * [3.3.1. Configurations](#331-configurations)
      * [3.3.2. Making POST API calls](#332-making-post-api-calls)
-* [4. Using the `onshape_client` library](#4-using-the-onshapeclient-library)
+* [4. Using the `onshape_client` library](#4-using-the-onshape_client-library)
 
 ## 1. General resources 
 Before getting started, you should have a working background knowledge on the Python programming language and preferrably some experience with Jupyter notebooks in Google Colab. Working in the same development environment gives better efficiency on the integration to Onshape. 
