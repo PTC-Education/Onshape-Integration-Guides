@@ -58,7 +58,7 @@ There is also an efficient way of separating the URL into its components:
     url = 'https://cad.onshape.com/documents/263517311c2ad139d4eb57ca/w/b45057ae06777e0c28bca6c5/e/d316bcbc694c9dbb6555f340'
     element = OnshapeElement(url) 
     
-    base = elemenet.base_url
+    base = element.base_url
     
     # Assume we would like to replace "did", "wid", and "eid" of the "fixed_url" with IDs from the main "url" above 
     fixed_url = '/api/partstudios/d/did/w/wid/e/eid/massproperties'
@@ -166,7 +166,7 @@ For example, the example above tries to make changes to a feature in the documen
 ## 4. Using the `onshape_client` library 
 Instead of building API calls from scratch, installing and importing the `onshape_client` library also allow you to make these API calls directly. However, the documentation that automatically shows up when filling the arguments of these calls is not yet fully comprehensive, which may require further referrence to [Glassworks](https://cad.onshape.com/glassworks/explorer). The source code for this library can be found in [this GitHub repository](https://github.com/onshape-public/onshape-clients), and the code for all API calls can be found in [this directory](https://github.com/onshape-public/onshape-clients/tree/master/python/onshape_client/oas/api). 
 
-With a `client` set up as shown in [section 3.3](#33-initiating-an-onshape-api-call), here is an example of getting the mass properties of a part studio in Onshape through making API calls: 
+With a `client` set up as shown in [section 3.3](#33-initiating-an-onshape-api-call), here is an example of getting the mass properties of a part studio in Onshape through making API calls (corresponds to [this Glassworks endpoint](https://cad.onshape.com/glassworks/explorer/#/PartStudio/getPartStudioMassProperties)): 
 
     response = client.part_studios_api.get_part_studio_mass_properties(did="263517311c2ad139d4eb57ca", 
                                                                        wvm='w', 
