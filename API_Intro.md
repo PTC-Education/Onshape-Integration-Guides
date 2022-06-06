@@ -34,7 +34,9 @@ To gain access to your Onshape document through making API calls, we need to fir
         access = '{access_key}'
         secret = '{secret_key}'
 
-**CAUTION:** you should NEVER share your API keys with other people, nor upload this publicly through the Internet. Having access to your API keys is equivalent to gaining access to your Onshape account through password login with the permissions you specified in step 3 above. 
+**CAUTION:** 
+- You should NEVER share your API keys with other people, nor upload this publicly through the Internet. Having access to your API keys is equivalent to gaining access to your Onshape account through password login with the permissions you specified in step 3 above. 
+- You should also periodically delete your API keys and create a new set of keys on the [developer portal](https://dev-portal.onshape.com), so that even you accidentally uploaded your keys to any public platform, the leaked keys can be deactivated. 
 
 ## 3. Getting started with Onshape REST API 
 Note that this section only describes the most basic structure of a typical Onshape API call, more advanced applications can be found in the [Onshape API Snippets](https://github.com/PTC-Education/PTC-API-Playground/blob/main/Onshape_API_Snippets.ipynb) and other sample projects in the [PTC-API-Playground](https://github.com/PTC-Education/PTC-API-Playground). 
@@ -55,7 +57,9 @@ There is also an efficient way of separating the URL into its components:
 
     url = 'https://cad.onshape.com/documents/263517311c2ad139d4eb57ca/w/b45057ae06777e0c28bca6c5/e/d316bcbc694c9dbb6555f340'
     element = OnshapeElement(url) 
-
+    
+    base = elemenet.base_url
+    
     # Assume we would like to replace "did", "wid", and "eid" of the "fixed_url" with IDs from the main "url" above 
     fixed_url = '/api/partstudios/d/did/w/wid/e/eid/massproperties'
     fixed_url = fixed_url.replace('did', element.did)
@@ -101,9 +105,9 @@ Putting everything together, here is an example of a complete API call to get th
 
     url = 'https://cad.onshape.com/documents/263517311c2ad139d4eb57ca/w/b45057ae06777e0c28bca6c5/e/d316bcbc694c9dbb6555f340'
     
-    base = 'https://cad.onshape.com/' 
-    fixed_url = '/api/partstudios/d/did/w/wid/e/eid/massproperties'
     element = OnshapeElement(url) 
+    base = element.base_url
+    fixed_url = '/api/partstudios/d/did/w/wid/e/eid/massproperties'
     fixed_url = fixed_url.replace('did', element.did)
     fixed_url = fixed_url.replace('wid', element.wvmid)
     fixed_url = fixed_url.replace('eid', element.eid)

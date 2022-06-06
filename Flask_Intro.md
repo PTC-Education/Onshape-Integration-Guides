@@ -1,5 +1,5 @@
 # Introduction to Integrating Flask Applications in Onshape 
-This guide provides a brief introduction on the necessary components of building a Python Flask applcation for Onshape integration. Then, it introduces the actual integration of the app to the user interface of an Onshape document. 
+This guide provides a brief introduction on the necessary components of building a Python Flask application for Onshape integration. Then, it introduces the actual integration of the app to the user interface of an Onshape document. 
 
 ## Table of contents 
 * [1. General resources](#1-general-resources)
@@ -137,7 +137,7 @@ In the Flask script, we can write the following code before we define the app's 
 
     for _, _, files in os.walk('.'): 
         if "OnshapeAPIKey.py" in files: 
-            exec(open("OnshapeAPIKey,py").read())
+            exec(open("OnshapeAPIKey.py").read())
             appkey = access 
             secretkey = secret 
             break 
