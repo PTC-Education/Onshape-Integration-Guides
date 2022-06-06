@@ -10,12 +10,14 @@ This guide provides a brief introduction on setting up and using the Onshape RES
    * [3.3. Initiating an Onshape API call](#32-rest-api)
      * [3.3.1. Configurations](#331-configurations)
      * [3.3.2. Making POST API calls](#332-making-post-api-calls)
+* [4. Using the `onshape_client` library](#4-using-the-onshapeclient-library)
 
 ## 1. General resources 
 Before getting started, you should have a working background knowledge on the Python programming language and preferrably some experience with Jupyter notebooks in Google Colab. Working in the same development environment gives better efficiency on the integration to Onshape. 
 
 Below are some useful resources and links that will be referred to in this guide, please feel free to save these resources for future referrence: 
 - All Onshape API endpoints are documented on [Glassworks](https://cad.onshape.com/glassworks/explorer/#/). 
+- The source code of the `onshape_client` library can be found in [this GitHub repository](https://github.com/onshape-public/onshape-clients) and the code for all API calls can be found in [this directory](https://github.com/onshape-public/onshape-clients/tree/master/python/onshape_client/oas/api). 
 - The [PTC-API-Playground](https://github.com/PTC-Education/PTC-API-Playground) GitHub repository provides various sample projects through making Onshape API calls. 
 - A libary of ready-to-use Python snippets of Onshape API calls can be found [here](https://github.com/PTC-Education/PTC-API-Playground/blob/main/Onshape_API_Snippets.ipynb), which can be easily imported to your own Jupyter notebook on Google Colab. A quick guide to import can be found in the `README.md` file of its home repository. 
 - A few more introduction videos on Digital Twins with the Onshape REST API can be found [here](https://ptc-education.github.io/docs/solutions/onshapedx). 
@@ -156,3 +158,21 @@ As an example, let's take a look at snippet 01.4 in the [Onshape API Snippets](h
 Note that when you open a `POST` endpoint on [Glassworks](https://cad.onshape.com/glassworks/explorer/#/), there should be a section named "Request body" under the "Parameters" that are required for the call. You should define the `body` for your API call request to include the required information as specified. 
 
 For example, the example above tries to make changes to a feature in the document, and the [endpoint](https://cad.onshape.com/glassworks/explorer/#/PartStudio/updatePartStudioFeature) of the `POST` call in step 3 requires the information of the `"feature"` that is to be changed. Hence, the required information for that specific feature is what you will need to locate, retrieve, and modify in step 2. 
+
+## 4. Using the `onshape_client` library 
+Instead of building API calls from scratch, installing and importing the `onshape_client` library also allow you to make these API calls directly. However, the documentation that automatically shows up when filling the arguments of these calls is not yet fully comprehensive, which may require further referrence to [Glassworks](https://cad.onshape.com/glassworks/explorer). The source code for this library can be found in [this GitHub repository](https://github.com/onshape-public/onshape-clients), and the code for all API calls can be found in [this directory](https://github.com/onshape-public/onshape-clients/tree/master/python/onshape_client/oas/api). 
+
+With a `client` set up as shown in [section 3.3](#33-initiating-an-onshape-api-call), here is an example of getting the mass properties of a part studio in Onshape through making API calls: 
+
+    response = client.part_studios_api.get_part_studio_mass_properties(did="263517311c2ad139d4eb57ca", 
+                                                                       wvm='w', 
+                                                                       wvmid='b45057ae06777e0c28bca6c5', 
+                                                                       eid='d316bcbc694c9dbb6555f340')
+    print(response)
+
+Note a few things from this example: 
+- After you type out `client.`, you should be able to see a list of different APIs, which corresponds to the API categories on [Glassworks](https://cad.onshape.com/glassworks/explorer). 
+- After specifying the API category (e.g., `client.part_studios_api.` in this case), you should be able to see a list of different API calls, which are all the API calls that can be made through the `onshape_client` library. Note that the function names may be slightly different from the titles shown on Glassworks.
+- The arguments of the function should align with the field names on [Glassworks](https://cad.onshape.com/glassworks/explorer). In the example above, the arguments included are all the required parameters for the call, and you can definitely also enter other optional parameters as well. 
+- The returned output of the function (i.e., `response` in this case) is already well formatted; a simple `print` statement is capable of printing it in a human-readable format. 
+- If you run into any errors when executing the API call, you may want to check out the source code of the function [here](https://github.com/onshape-public/onshape-clients/tree/master/python/onshape_client/oas/api). 
