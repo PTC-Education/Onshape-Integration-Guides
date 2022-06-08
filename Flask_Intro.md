@@ -57,9 +57,9 @@ From the code block above, we provide an efficient approach to obtain the `DID`,
     <!doctype html>
     <form action="/config">
         <label for="appkey">API Key:</label>
-        <input type="text" id="appkey" name="appkey" value={{APPKEY}}><br><br>
+        <input type="password" id="appkey" name="appkey" value={{APPKEY}}><br><br>
         <label for="secretkey">Secret Key:</label>
-        <input type="text" id="secretkey" name="secretkey" value={{SECRETKEY}}><br><br>
+        <input type="password" id="secretkey" name="secretkey" value={{SECRETKEY}}><br><br>
 
         <label for="did">DocumentId:</label>
         <input type="text" id="did" name="did" value={{DID}}><br><br>
@@ -71,7 +71,9 @@ From the code block above, we provide an efficient approach to obtain the `DID`,
         <input type="submit" value="Submit">
     </form>
 
-In the HTML form shown above, we are essentially collecting information, including the user's API keys (`appkey` and `secretkey`) and the document's IDs (`DID`, `WID`, and `EID`). Notice how we are receiving the three document IDs from the `login()` function in this HTML. Depending on the specific API calls that you will be making, you may need to request for more information from the user (e.g., configuration, feature ID, etc.). You should also provide space for the users in this `/login` page to enter those information and pass them to the `/config` page that will be shown below. 
+In the HTML form shown above, we are essentially collecting information, including the user's API keys (`appkey` and `secretkey`) and the document's IDs (`DID`, `WID`, and `EID`). Notice how we are receiving the three document IDs from the `login()` function in this HTML with `value={{...}}`; auto-retrieval of the `appkey` and `secretkey` will be described below in [section 2.1](#21-security-on-api-keys). Also, a different input `type` is used for `appkey` and `secretkey` (`type="password"`), such that the entered keys in those two fields will only be shown as dots for added security. 
+
+Depending on the specific API calls that you will be making, you may need to request for more information from the user (e.g., configuration, feature ID, etc.). You should also provide space for the users in this `/login` page to enter those information and pass them to the `/config` page that will be shown below. 
 
 As shown in the second line of the HTML code above, the answers collected in this form will be passed to a `/config` page that configure the user with the provided API keys to the Onshape document specified: 
 
