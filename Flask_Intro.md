@@ -118,6 +118,7 @@ Such that, the return message from `configure_onshape_client()` will be put in t
 As a result, we have presented the most basic structure of a Flask app that can make REST API calls to Onshape documents specifically. The main purpose of these two webpages are to allow the users to enter their credential information in a web form and then make API calls to the document that they specify. Some potential directions that you may build upon this simplest structure include: 
 - Add additional HTML designs and CSS styling to the webpages to improve the user interface and allow more functions 
 - Build additional webpage with Flask for additional functionality 
+- Plot and show data visualization as output, instead of only text. More information can be found [here](https://www.tutorialspoint.com/how-to-show-matplotlib-in-flask). 
 
 ### 2.1. Security on API keys 
 For the API keys (i.e., `appkey` and `secretkey`), there are generally two ways to handle them securely in an integrated Flask app: 
