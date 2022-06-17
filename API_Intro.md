@@ -10,7 +10,9 @@ This guide provides a brief introduction on setting up and using the Onshape RES
    * [3.3. Initiating an Onshape API call](#32-rest-api)
      * [3.3.1. Configurations](#331-configurations)
      * [3.3.2. Making POST API calls](#332-making-post-api-calls)
-* [4. Using the `onshape_client` library](#4-using-the-onshape_client-library)
+* [4. Other methods](#4-other-methods)
+    * [4.1. Using the `onshape_client` library](#41-using-the-onshape_client-library)
+    * [4.2. Using Jupyter notebook snippets](#42-using-jupyter-notebook-snippets)
 
 ## 1. General resources 
 Before getting started, you should have a working background knowledge on the Python programming language and preferrably some experience with Jupyter notebooks in Google Colab. Working in the same development environment gives better efficiency on the integration to Onshape. 
@@ -70,7 +72,7 @@ There is also an efficient way of separating the URL into its components:
 
     $ pip install onshape-client 
 
-### 3.2 REST API 
+### 3.2. REST API 
 On [Glassworks Explorer](https://cad.onshape.com/glassworks/explorer/#/), every Onshape API endpoint is labelled with its respective API call type. For every REST API call in Onshape, it should fall under one of the three types: 
 - `GET`: retrieve information from the server (e.g., retrieve the parameters of a specific feature in the Onshape document). 
 - `POST`: update the server with new information (e.g., change the  parameter values of a specific feature in the Onshape document). 
@@ -78,7 +80,7 @@ On [Glassworks Explorer](https://cad.onshape.com/glassworks/explorer/#/), every 
 
 **Note:** you may not be able to use any API call labelled with `DELETE` if you did not allow deleting permission in step 3 of [section 2](#2-generating-your-onshape-api-keys) above. 
 
-### 3.3 Initiating an Onshape API call
+### 3.3. Initiating an Onshape API call
 Before making any API call to Onshape, you need to first set up and configure an "Onshape client" with your API keys. In other words, you need to log in to your Onshape account before you can make changes to your documents, but through an API approach. In general, the set-up process is in the following format: 
 
     from onshape_client.client import Client 
@@ -129,7 +131,7 @@ With the procedure detailed above, the `response` from such API calls will be st
 
 Then, `parsed` can be accessed in the same way as a Python dictionary, and the `print` statement will print out `parsed` in a more readable structure with indentation. 
 
-#### 3.3.1 Configurations
+#### 3.3.1. Configurations
 When modelling in an Onshape document, building ["configurations"](https://cad.onshape.com/help/Content/configurations.htm) of the design provides an efficient method to change the design to different states, both within the Onshape user interface and through making REST API calls. With configurations created for an Onshape document, one can easily change the model in Onshape through multiple API calls with different `configuration` input for `query_params` in the request. In general, there are two types of configuration that one can create in Onshape: 
 1. Configuration input: various user-defined states of the model that the model can be varied to, where each state may change multiple parameters and/or dimensions of the design. 
 2. Configuration variable: similar to an ordinary [variable](https://cad.onshape.com/help/Content/variable.htm) in Onshape, but with more efficient access and control through API calls. 
@@ -151,7 +153,7 @@ Then, a possible configuration of this model can be specified through an API cal
 
 **Note:** however, if you do not specify the `"configuration"` in your `query_params` for the API calls, Onshape will always use the default value of all the configurations, despite any changes in the actual Onshape document. Also, changes to the configuration through API calls are not saved in your actual Onshape document. Hence, you should plan the usage of your CAD model beforehand when deciding whether you should build the model with "configurations" or "variables" (which is essentially a part "feature"). 
 
-#### 3.3.2 Making `POST` API calls 
+#### 3.3.2. Making `POST` API calls 
 When making a `POST` API call to update information of the Onshape model, most procedures and API call components are similar to a `GET` call. The major difference comes from specifying the payload `body` of the request. 
 
 As an example, let's take a look at snippet 01.4 in the [Onshape API Snippets](https://github.com/PTC-Education/PTC-API-Playground/blob/main/Onshape_API_Snippets.ipynb). For this example, we would like to update the geometry of a part feature in the Part Studio. In general, the overall pathway of achieving this will be: 
@@ -163,8 +165,11 @@ Note that when you open a `POST` endpoint on [Glassworks](https://cad.onshape.co
 
 For example, the example above tries to make changes to a feature in the document, and the [endpoint](https://cad.onshape.com/glassworks/explorer/#/PartStudio/updatePartStudioFeature) of the `POST` call in step 3 requires the information of the `"feature"` that is to be changed. Hence, the required information for that specific feature is what you will need to locate, retrieve, and modify in step 2. 
 
-## 4. Using the `onshape_client` library 
-Instead of building API calls from scratch, installing and importing the `onshape_client` library also allow you to make these API calls directly. However, the documentation that automatically shows up when filling the arguments of these calls is not yet fully comprehensive, which may require further referrence to [Glassworks](https://cad.onshape.com/glassworks/explorer). The source code for this library can be found in [this GitHub repository](https://github.com/onshape-public/onshape-clients), and the code for all API calls can be found in [this directory](https://github.com/onshape-public/onshape-clients/tree/master/python/onshape_client/oas/api). 
+## 4. Other methods
+Instead of building API calls from scratch, there are two other methods that may provide more efficient access to API calls. **Note:** these are methods are still under testing, some API calls may not function properly. Hence, it is still important to learn how to build an API call from scratch with the steps outlined above. 
+
+### 4.1. Using the `onshape_client` library 
+Installing and importing the `onshape_client` library also allow you to make these API calls directly. However, the documentation that automatically shows up when filling the arguments of these calls is not yet fully comprehensive, which may require further referrence to [Glassworks](https://cad.onshape.com/glassworks/explorer). The source code for this library can be found in [this GitHub repository](https://github.com/onshape-public/onshape-clients), and the code for all API calls can be found in [this directory](https://github.com/onshape-public/onshape-clients/tree/master/python/onshape_client/oas/api). 
 
 With a `client` set up as shown in [section 3.3](#33-initiating-an-onshape-api-call), here is an example of getting the mass properties of a part studio in Onshape through making API calls (corresponds to [this Glassworks endpoint](https://cad.onshape.com/glassworks/explorer/#/PartStudio/getPartStudioMassProperties)): 
 
@@ -180,3 +185,6 @@ Note a few things from this example:
 - The arguments of the function should align with the field names on [Glassworks](https://cad.onshape.com/glassworks/explorer). In the example above, the arguments included are all the required parameters for the call, and you can definitely also enter other optional parameters as well. 
 - The returned output of the function (i.e., `response` in this case) is already well formatted; a simple `print` statement is capable of printing it in a human-readable format. 
 - If you run into any errors when executing the API call, you may want to check out the source code of the function [here](https://github.com/onshape-public/onshape-clients/tree/master/python/onshape_client/oas/api). 
+
+### 4.2. Using Jupyter notebook snippets
+All API calls have been automatically generated with the method stored in [this repository](https://github.com/PTC-Education/Python-OpenAPI). The API calls are structured in the form of code snippets in Jupyter notebook, which provides greater flexibility with documentation. However, the generator may not be routinely updated with the most current version of the API specification. Also, it should be noted that this repository is only tested with some of the more popular API endpoints, and it may run into errors for edge cases. 
